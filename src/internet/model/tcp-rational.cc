@@ -22,6 +22,7 @@
 
 #include "tcp-rational.h"
 #include "ns3/log.h"
+#include "simulator.h"
 
 namespace ns3 {
 
@@ -89,7 +90,36 @@ TcpRational::PktsAcked (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked,
                      const Time& rtt)
 {
   NS_LOG_FUNCTION (this << tcb << segmentsAcked << rtt);
-  Time current_time = 
+  Time current_time = Simulator::Now();
+  double now = current_time.GetDouble();
+  double last_rtt = rtt.GetDouble();
+  double g = 1/8;
+  double h = 1/4;
+  double delta;
+  uint32_t ackcount,i;
+
+  double last_ack_time = now;
+
+  //Add acknowledgments part
+
+  uint32_t timestep = 1000;
+  // UpdateMemory(timestep*tcb->m_rcvTimestampEchoReply, timestep*now);
+  // UpdateCongestionWindowAndPacing();
+
+  // Acknowledgement part to be added
+
+}
+/*
+void 
+RationalTcpAgent::UpdateMemory( const RemyPacket packet )
+{
+	std::vector< RemyPacket > packets( 1, packet );
+	_memory.packets_received( packets );
+}
+
+*/
+
+
 
 }
 }
