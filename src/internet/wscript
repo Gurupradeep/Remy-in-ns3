@@ -155,6 +155,7 @@ def build(bld):
         'model/tcp-bic.cc',
         'model/tcp-yeah.cc',
         'model/tcp-ledbat.cc',
+        'model/tcp-rational.cc'
         'model/tcp-illinois.cc',
         'model/tcp-htcp.cc',
         'model/tcp-rx-buffer.cc',
@@ -383,6 +384,7 @@ def build(bld):
         'model/tcp-illinois.h',
         'model/tcp-htcp.h',
         'model/tcp-ledbat.h',
+        'model/tcp-rational.h'
         'model/tcp-socket-base.h',
         'model/tcp-tx-buffer.h',
         'model/tcp-rx-buffer.h',
