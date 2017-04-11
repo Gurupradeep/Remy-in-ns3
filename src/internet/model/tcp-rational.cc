@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2015, National Institute of Technology, Karnataka. 
+ * Copyright (c) 2017, National Institute of Technology, Karnataka. 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -36,18 +36,7 @@ TcpRational::GetTypeId (void)
     .SetParent<TcpNewReno> ()
     .AddConstructor<TcpRational> ()
     .SetGroupName ("Internet")
-    .AddAttribute ("Alpha", "Lower bound of packets in network",
-                   UintegerValue (2),
-                   MakeUintegerAccessor (&TcpRational::m_alpha),
-                   MakeUintegerChecker<uint32_t> ())
-    .AddAttribute ("Beta", "Upper bound of packets in network",
-                   UintegerValue (4),
-                   MakeUintegerAccessor (&TcpRational::m_beta),
-                   MakeUintegerChecker<uint32_t> ())
-    .AddAttribute ("Gamma", "Limit on increase",
-                   UintegerValue (1),
-                   MakeUintegerAccessor (&TcpRational::m_gamma),
-                   MakeUintegerChecker<uint32_t> ())
+   	//Attributes to be added
   ;
   return tid;
 }
@@ -118,7 +107,11 @@ RationalTcpAgent::UpdateMemory( const RemyPacket packet )
 }
 
 */
-
+std::string
+TcpRational::GetName () const
+{
+  return "TcpRational";
+}
 
 
 }
