@@ -22,7 +22,7 @@
 
 #include "tcp-rational.h"
 #include "ns3/log.h"
-#include "simulator.h"
+#include "ns3/simulator.h"
 
 namespace ns3 {
 
@@ -107,6 +107,11 @@ RationalTcpAgent::UpdateMemory( const RemyPacket packet )
 }
 
 */
+void 
+TcpRational :: UpdateCongestionWindowAndPacing( void )
+{
+	return ;
+}
 std::string
 TcpRational::GetName () const
 {
@@ -114,5 +119,4 @@ TcpRational::GetName () const
 }
 
 
-}
 }

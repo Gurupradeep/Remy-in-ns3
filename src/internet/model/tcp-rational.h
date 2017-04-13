@@ -45,7 +45,7 @@ public:
    * \brief Copy constructor
    * \param sock the object to copy
    */
-  TcpRational (const TcpVegas& sock);
+  TcpRational (const TcpRational& sock);
   virtual ~TcpRational (void);
 
   virtual std::string GetName () const;
@@ -60,12 +60,24 @@ public:
 
 
   virtual Ptr<TcpCongestionOps> Fork ();
-  virtual UpdateCongestionWindowAndPacing(void);
-  virtual double InitialWindow()
+  virtual void UpdateCongestionWindowAndPacing( void );
+  virtual double InitialWindow();
 //virtual void UpdateMemory(const RemyPacket packet);
 
 
+private:
+	double m_intersendTime;
+
+protected :
+	double m_lastsendTime;
+	uint32_t m_countBytesAcked;
 
 
+
+
+
+
+};
 }
-}
+
+#endif 
