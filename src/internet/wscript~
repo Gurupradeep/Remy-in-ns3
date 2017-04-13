@@ -226,6 +226,7 @@ def build(bld):
         'utils/dna.pb.cc',
         'utils/memory.cc',
         'utils/memoryrange.cc',
+        'utils/packet.cc',
         'utils/whisker.cc',
         'utils/whiskertree.cc',
         ]
