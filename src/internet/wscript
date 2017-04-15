@@ -1,6 +1,7 @@
 ## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 import os
 import sys
+import subprocess
 
 from waflib import Options, Logs, Utils, Task
 
@@ -20,7 +21,7 @@ def options(opt):
 
 def configure(conf):
     conf.env['ENABLE_NSC'] = False
-
+    conf.env.append_value("CXXFLAGS", ["pkg-config", "-cflags", "-libs protobuf"])
     if Options.options.disable_nsc:
         conf.report_optional_feature("nsc", "Network Simulation Cradle", False,
                                      "disabled by user request")
@@ -94,6 +95,7 @@ def configure(conf):
             found = True
             conf.env.append_value('NS3_MODULE_PATH',
                                   os.path.abspath(os.path.join(conf.env['WITH_NSC'], path)))
+
     if not found:
         conf.env['NSC_ENABLED'] = False
         conf.report_optional_feature("nsc", "Network Simulation Cradle", False,
@@ -223,6 +225,11 @@ def build(bld):
         'model/rip-header.cc',
         'helper/rip-helper.cc',
         'model/tcp-rational.cc',
+        'utils/whiskertree.cc',
+        'utils/dna.pb.cc',
+        'utils/memory.cc',
+        'utils/memoryrange.cc',
+        'utils/whisker.cc',
         ]
 
     internet_test = bld.create_ns3_module_test_library('internet')
@@ -398,6 +405,12 @@ def build(bld):
         'model/rip-header.h',
         'helper/rip-helper.h',
         'model/tcp-rational.h',
+        'utils/whiskertree.hh',
+        'utils/dna.pb.h',
+        'utils/memory.hh',
+        'utils/memoryrange.hh',
+        'utils/packet.hh',
+        'utils/whisker.hh',
        ]
 
     if bld.env['NSC_ENABLED']:
