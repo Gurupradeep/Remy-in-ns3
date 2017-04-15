@@ -24,11 +24,18 @@
 #define TCPRATIONAL_H
 
 #include "ns3/tcp-congestion-ops.h"
+#include "ns3/whiskertree.hh"
+
 
 namespace ns3 {
 
 class TcpRational : public TcpNewReno
 {
+private : 
+	const WhiskerTree *_whiskers;
+	Memory _memory;
+	//	double _intersend_time;
+
 public:
   /**
    * \brief Get the type ID.
@@ -60,9 +67,7 @@ public:
 
 
   virtual Ptr<TcpCongestionOps> Fork ();
-  virtual void UpdateCongestionWindowAndPacing( void );
-  virtual double InitialWindow();
-//virtual void UpdateMemory(const RemyPacket packet);
+  virtual void UpdateMemory(const RemyPacket packet);
 
 
 private:
@@ -70,8 +75,7 @@ private:
 
 protected :
 	double m_lastsendTime;
-	uint32_t m_countBytesAcked;
-
+	
 
 
 

@@ -23,6 +23,12 @@
 #include "tcp-rational.h"
 #include "ns3/log.h"
 #include "ns3/simulator.h"
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <assert.h>
 
 namespace ns3 {
 
@@ -36,18 +42,15 @@ TcpRational::GetTypeId (void)
     .SetParent<TcpNewReno> ()
     .AddConstructor<TcpRational> ()
     .SetGroupName ("Internet")
-   	//Attributes to be added
   ;
   return tid;
 }
 
+
 TcpRational::TcpRational (void)
   : TcpNewReno (),
   	m_intersendTime( 0.0 ),
-  	m_lastsendTime( 0.0 ),
-  	m_countBytesAcked( 0 )
-
-   
+  	m_lastsendTime( 0.0 )
 {
   NS_LOG_FUNCTION (this);
 }
@@ -55,16 +58,17 @@ TcpRational::TcpRational (void)
 TcpRational::TcpRational (const TcpRational& sock)
   : TcpNewReno (sock),
     m_intersendTime(sock.m_intersendTime),
-  	m_lastsendTime(sock.m_lastsendTime),
-  	m_countBytesAcked(sock.m_countBytesAcked)
+  	m_lastsendTime(sock.m_lastsendTime)
 
 {
   NS_LOG_FUNCTION (this);
 }
 
-TcpRational::~TcpRational
- (void)
+TcpRational::~TcpRational (void)
 {
+  	if ( _whiskers ) {
+			delete _whiskers;
+		} 	
   NS_LOG_FUNCTION (this);
 }
 
@@ -81,36 +85,41 @@ TcpRational::PktsAcked (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked,
   NS_LOG_FUNCTION (this << tcb << segmentsAcked << rtt);
   Time current_time = Simulator::Now();
   double now = current_time.GetDouble();
-  double last_rtt = rtt.GetDouble();
-  double g = 1/8;
-  double h = 1/4;
-  double delta;
-  uint32_t ackcount,i;
-
-  double last_ack_time = now;
-
-  //Add acknowledgments part
-
+//	  double last_rtt = rtt.GetDouble();
   uint32_t timestep = 1000;
-  // UpdateMemory(timestep*tcb->m_rcvTimestampEchoReply, timestep*now);
-  // UpdateCongestionWindowAndPacing();
+  UpdateMemory(RemyPacket((unsigned int) timestep*tcb->m_rcvTimestampEchoReply, (unsigned int)timestep*now));
+  IncreaseWindow(tcb,1);
 
   // Acknowledgement part to be added
 
 }
-/*
 void 
-RationalTcpAgent::UpdateMemory( const RemyPacket packet )
+TcpRational::UpdateMemory( const RemyPacket packet )
 {
 	std::vector< RemyPacket > packets( 1, packet );
 	_memory.packets_received( packets );
 }
-
-*/
 void 
-TcpRational :: UpdateCongestionWindowAndPacing( void )
+TcpRational :: IncreaseWindow(Ptr<TcpSocketState> tcb,uint32_t segmentsAcked)
 {
-	return ;
+	const Whisker & current_whisker( _whiskers->use_whisker( _memory ) );
+
+	unsigned int new_cwnd = current_whisker.window( (unsigned int)tcb->m_cWnd );
+
+	if ( new_cwnd > 16384 ) {
+		new_cwnd = 16384;
+	}
+
+	tcb->m_cWnd = new_cwnd;
+
+}
+uint32_t
+TcpRational::GetSsThresh (Ptr<const TcpSocketState> state,
+                         uint32_t bytesInFlight)
+{
+  NS_LOG_FUNCTION (this << state << bytesInFlight);
+
+  return std::max (2 * state->m_segmentSize, bytesInFlight / 2);
 }
 std::string
 TcpRational::GetName () const

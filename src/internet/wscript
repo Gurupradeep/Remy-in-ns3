@@ -223,11 +223,6 @@ def build(bld):
         'model/rip-header.cc',
         'helper/rip-helper.cc',
         'model/tcp-rational.cc',
-        'utils/dna.pb.cc',
-        'utils/memory.cc',
-        'utils/memoryrange.cc',
-        'utils/whisker.cc',
-        'utils/whiskertree.cc',
         ]
 
     internet_test = bld.create_ns3_module_test_library('internet')
@@ -403,12 +398,6 @@ def build(bld):
         'model/rip-header.h',
         'helper/rip-helper.h',
         'model/tcp-rational.h',
-        'utils/dna.pb.h',
-        'utils/memory.hh',
-        'utils/memoryrange.hh',
-        'utils/packet.hh',
-        'utils/whisker.hh',
-        'utils/whiskertree.hh',
        ]
 
     if bld.env['NSC_ENABLED']:
