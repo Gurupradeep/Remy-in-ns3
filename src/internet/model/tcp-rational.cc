@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2017, National Institute of Technology, Karnataka. 
+ * Copyright (c) 2017, National Institute of Technology, Karnataka.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -68,7 +68,7 @@ TcpRational::~TcpRational (void)
 {
   	if ( _whiskers ) {
 			delete _whiskers;
-		} 	
+		}
   NS_LOG_FUNCTION (this);
 }
 
@@ -85,27 +85,25 @@ TcpRational::PktsAcked (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked,
   NS_LOG_FUNCTION (this << tcb << segmentsAcked << rtt);
   Time current_time = Simulator::Now();
   double now = current_time.GetDouble();
-//	  double last_rtt = rtt.GetDouble();
   uint32_t timestep = 1000;
   UpdateMemory(RemyPacket((unsigned int) timestep*tcb->m_rcvTimestampEchoReply, (unsigned int)timestep*now));
   IncreaseWindow(tcb,1);
 
-  // Acknowledgement part to be added
-
 }
-void 
+void
 TcpRational::UpdateMemory( const RemyPacket packet )
 {
 	std::vector< RemyPacket > packets( 1, packet );
 	_memory.packets_received( packets );
 }
-void 
+void
 TcpRational :: IncreaseWindow(Ptr<TcpSocketState> tcb,uint32_t segmentsAcked)
 {
 	const Whisker & current_whisker( _whiskers->use_whisker( _memory ) );
 
 	unsigned int new_cwnd = current_whisker.window( (unsigned int)tcb->m_cWnd );
 
+  // The range of our state space is 16384
 	if ( new_cwnd > 16384 ) {
 		new_cwnd = 16384;
 	}
@@ -128,4 +126,4 @@ TcpRational::GetName () const
 }
 
 
-}
+} // namespace ns3
